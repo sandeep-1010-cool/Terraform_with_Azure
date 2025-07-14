@@ -8,4 +8,8 @@ terraform {
       version = "~> 3.0"
     }
   }
+  
+  backend "azurerm" {
+    # Backend configuration will be provided via -backend-config flag
+  }
 } 
