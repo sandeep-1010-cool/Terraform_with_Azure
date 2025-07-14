@@ -1,0 +1,14 @@
+# Backend Configuration for Development Environment
+# This file contains the backend configuration parameters for remote state storage
+# Updated with actual values from bootstrap deployment
+
+resource_group_name  = "rg-terraform-bootstrap"
+storage_account_name = "tfstate24884"
+container_name       = "tfstate"
+key                  = "envs/dev/terraform.tfstate"
+
+# Usage Instructions:
+# 1. This configuration is ready to use with the actual storage account name
+# 2. Use this configuration in your environment-specific Terraform configurations
+# 3. Example usage:
+#    terraform init -backend-config=dev_backend-config.txt 
