@@ -1,0 +1,56 @@
+name: 'Terraform Apply'
+description: 'Apply Terraform plan for specified environment'
+
+inputs:
+  environment:
+    description: 'Environment to apply (dev/prod)'
+    required: true
+    default: 'dev'
+  terraform-version:
+    description: 'Terraform version to use'
+    required: false
+    default: '1.6.6'
+  client-id:
+    description: 'Azure client ID'
+    required: true
+  tenant-id:
+    description: 'Azure tenant ID'
+    required: true
+  subscription-id:
+    description: 'Azure subscription ID'
+    required: true
+  auto-approve:
+    description: 'Auto approve the apply'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: ./.github/actions/setup-terraform
+      with:
+        terraform-version: ${{ inputs.terraform-version }}
+        client-id: ${{ inputs.client-id }}
+        tenant-id: ${{ inputs.tenant-id }}
+        subscription-id: ${{ inputs.subscription-id }}
+
+    - name: Terraform Init
+      shell: bash
+      run: terraform init -backend-config=envs/${{ inputs.environment }}/${inputs.environment}_backend-config.txt
+
+    - name: Terraform Plan
+      shell: bash
+      run: terraform plan -input=false -out=plan.tfplan
+
+    - name: Terraform Apply
+      shell: bash
+      run: |
+        if [ "${{ inputs.auto-approve }}" = "true" ]; then
+          terraform apply -auto-approve plan.tfplan
+        else
+          terraform apply plan.tfplan
+        fi 

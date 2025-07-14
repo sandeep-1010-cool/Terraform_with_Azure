@@ -1,0 +1,40 @@
+name: 'Setup Terraform'
+description: 'Setup Terraform with Azure authentication'
+
+inputs:
+  terraform-version:
+    description: 'Terraform version to use'
+    required: false
+    default: '1.6.6'
+  client-id:
+    description: 'Azure client ID'
+    required: true
+  tenant-id:
+    description: 'Azure tenant ID'
+    required: true
+  subscription-id:
+    description: 'Azure subscription ID'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ inputs.terraform-version }}
+
+    - name: Azure Login with OIDC
+      uses: azure/login@v2
+      with:
+        client-id: ${{ inputs.client-id }}
+        tenant-id: ${{ inputs.tenant-id }}
+        subscription-id: ${{ inputs.subscription-id }}
+
+    - name: Set environment variables
+      shell: bash
+      run: |
+        echo "ARM_CLIENT_ID=${{ inputs.client-id }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ inputs.subscription-id }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ inputs.tenant-id }}" >> $GITHUB_ENV
+        echo "TF_IN_AUTOMATION=true" >> $GITHUB_ENV 

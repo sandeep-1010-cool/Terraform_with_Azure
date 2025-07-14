@@ -1,0 +1,19 @@
+name: 'Terraform Lint'
+description: 'Run TFLint for Terraform code quality'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: TFLint
+      uses: terraform-linters/setup-tflint@v4
+      with:
+        tflint_version: v0.50.3
+
+    - name: Run TFLint
+      shell: bash
+      run: |
+        tflint --init
+        tflint 

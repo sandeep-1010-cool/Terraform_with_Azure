@@ -1,0 +1,13 @@
+name: 'Terraform Security Scan'
+description: 'Run tfsec security scan on Terraform code'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: tfsec Security Scan
+      uses: aquasecurity/tfsec-action@v1.0.3
+      with:
+        soft_fail: false 
