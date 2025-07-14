@@ -1,10 +1,17 @@
 name: 'Terraform Security Scan'
 description: 'Run tfsec security scan on Terraform code'
 
+inputs:
+  github-token:
+    description: 'GitHub token for API requests'
+    required: false
+    default: ${{ github.token }}
+
 runs:
   using: 'composite'
   steps:
     - name: tfsec Security Scan
       uses: aquasecurity/tfsec-action@v1.0.3
       with:
-        soft_fail: false 
+        soft_fail: false
+        github_token: ${{ inputs.github-token }} 

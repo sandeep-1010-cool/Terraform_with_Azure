@@ -47,6 +47,7 @@ jobs:
         uses: ./.github/actions/terraform-validate
         with:
           terraform-version: ${{ matrix.terraform_version }}
+          environment: 'dev'
 
   lint:
     runs-on: ubuntu-latest
@@ -67,6 +68,8 @@ jobs:
 
       - name: Terraform Security Scan
         uses: ./.github/actions/terraform-security
+        with:
+          github-token: ${{ github.token }}
 
   # Planning Job
   plan:
