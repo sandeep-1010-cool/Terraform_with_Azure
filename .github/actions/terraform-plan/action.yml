@@ -33,7 +33,7 @@ runs:
 
     - name: Terraform Init
       shell: bash
-      run: terraform init -backend-config=envs/${{ inputs.environment }}/${inputs.environment}_backend-config.txt
+      run: terraform init -backend-config=envs/${{ inputs.environment }}/${{ inputs.environment }}_backend-config.txt
 
     - name: Terraform Plan
       shell: bash
